@@ -96,6 +96,36 @@
     /* No celular, oculta a última linha do dashboard simulado (ocupa menos espaço) */
     @media (max-width: 640px){ .sim-hide-mobile { display: none; } }
 
+    /* Popup de oferta (escolha de plano no CTA) */
+    .offer-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.7);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);overflow-y:auto;}
+    .offer-modal.open{display:flex;}
+    .offer-card{position:relative;width:100%;max-width:460px;background:#0E4D32;color:#fff;border:2px solid #000;border-radius:1rem;padding:28px 22px 22px;box-shadow:8px 8px 0 0 #000;animation:offerPop .25s ease;}
+    @keyframes offerPop{from{transform:translateY(16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+    .offer-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:2px solid #000;border-radius:9999px;background:#fff;color:#000;font-size:18px;line-height:1;cursor:pointer;font-weight:700;}
+    .offer-close:hover{background:#6FE3A4;}
+    .offer-title{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:clamp(20px,5.5vw,26px);line-height:1.05;letter-spacing:-.03em;margin:0 0 14px;}
+    .offer-title em{font-style:normal;color:#6FE3A4;}
+    .offer-sub{font-size:12px;font-weight:700;color:rgba(255,255,255,.55);margin:0 0 12px;}
+    .offer-tier{position:relative;border:2px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 16px;margin-bottom:12px;cursor:pointer;transition:border-color .2s,background .2s;}
+    .offer-tier:hover{border-color:rgba(255,255,255,.5);}
+    .offer-tier.selected{border-color:#6FE3A4;background:rgba(111,227,164,.1);}
+    .offer-radio{position:relative;flex-shrink:0;width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.45);}
+    .offer-tier.selected .offer-radio{border-color:#6FE3A4;background:#6FE3A4;}
+    .offer-tier.selected .offer-radio::after{content:"";position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:#0E4D32;transform:translate(-50%,-50%);}
+    .offer-tier-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+    .offer-tier-name{flex:1;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:15px;letter-spacing:-.02em;}
+    .offer-tier.complete .offer-tier-name{color:#6FE3A4;}
+    .offer-tier-price{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.03em;white-space:nowrap;}
+    .offer-list{list-style:none;display:flex;flex-direction:column;gap:7px;margin:0;padding:0;}
+    .offer-list li{font-size:13px;line-height:1.35;color:rgba(255,255,255,.85);display:flex;align-items:flex-start;gap:8px;}
+    .offer-list li::before{content:"\2713";color:#6FE3A4;font-weight:700;flex-shrink:0;}
+    .offer-list li.bonus::before{content:"\1F381";}
+    .offer-tier-tag{display:inline-block;margin-bottom:10px;font-size:10px;font-weight:700;color:#000;background:#6FE3A4;padding:3px 10px;border:2px solid #000;border-radius:9999px;}
+    .offer-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;text-align:center;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;border:2px solid #000;border-radius:12px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+    .offer-btn-primary{margin-top:6px;background:#6FE3A4;color:#000;font-size:clamp(14px,4vw,17px);padding:15px 18px;box-shadow:4px 4px 0 0 #000;}
+    .offer-btn-primary:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 0 #000;}
+    .offer-note{margin-top:12px;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.55);}
+
     @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } .btn-press,.cta-pulse{ transition:none; animation:none; } }
   </style>
 </head>
@@ -178,7 +208,7 @@
           </div>
           <span class="bg-brand-lime text-black text-sm font-bold px-3 py-1 border-2 border-black rounded-full rotate-3">90% OFF</span>
         </div>
-        <a href="#planos" class="cta-pulse btn-press mt-5 inline-flex w-full items-center justify-center gap-2 bg-brand-green text-white font-bold text-lg px-6 py-4 border-2 border-black rounded-xl shadow-hard-sm">
+        <a href="#planos" onclick="openOfferModal();return false;" class="cta-pulse btn-press mt-5 inline-flex w-full items-center justify-center gap-2 bg-brand-green text-white font-bold text-lg px-6 py-4 border-2 border-black rounded-xl shadow-hard-sm">
           Quero acessar agora
           <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
@@ -859,7 +889,7 @@
               <li class="flex items-start gap-2"><span class="text-brand-lime font-bold shrink-0">+</span><span>Atualizações vitalícias dos prompts</span></li>
             </ul>
           </div>
-          <a href="[LINK CHECKOUT]" class="cta-pulse btn-press mt-8 inline-flex w-full items-center justify-center gap-2 bg-brand-lime text-black font-bold text-lg px-6 py-4 border-2 border-black rounded-xl shadow-hard-sm">
+          <a href="#" onclick="openOfferModal();return false;" class="cta-pulse btn-press mt-8 inline-flex w-full items-center justify-center gap-2 bg-brand-lime text-black font-bold text-lg px-6 py-4 border-2 border-black rounded-xl shadow-hard-sm">
             QUERO ACESSAR POR R$ 9,90
             <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
@@ -927,7 +957,7 @@
     <div class="relative mx-auto max-w-3xl px-4 sm:px-6 py-20 text-center">
       <h2 class="font-heading font-extrabold tracking-tighter text-4xl sm:text-5xl leading-[0.95]">Você tem 2 caminhos.</h2>
       <p class="mt-6 max-w-xl mx-auto text-lg font-medium text-black/80">Continuar perdendo tempo travado no Excel do jeito antigo… ou aprender hoje a fazer a IA trabalhar por você, por menos do que uma pizza.</p>
-      <a href="#planos" class="cta-pulse btn-press mt-8 inline-flex items-center justify-center gap-2 bg-brand-green text-white font-bold text-lg sm:text-xl px-8 py-5 border-2 border-black rounded-xl shadow-hard">
+      <a href="#planos" onclick="openOfferModal();return false;" class="cta-pulse btn-press mt-8 inline-flex items-center justify-center gap-2 bg-brand-green text-white font-bold text-lg sm:text-xl px-8 py-5 border-2 border-black rounded-xl shadow-hard">
         QUERO CRIAR MINHAS PLANILHAS COM IA AGORA
         <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -954,6 +984,77 @@
       <p class="mt-6 text-xs text-white/40">© 2026 PlanIA. Todos os direitos reservados.</p>
     </div>
   </footer>
+
+  <!-- POPUP DE OFERTA (abre no clique do CTA principal) -->
+  <div class="offer-modal" id="offerModal" onclick="if(event.target===this)closeOfferModal()">
+    <div class="offer-card" role="dialog" aria-modal="true" aria-label="Escolha sua oferta">
+      <button class="offer-close" type="button" aria-label="Fechar" onclick="closeOfferModal()">×</button>
+      <h3 class="offer-title">Leve a versão <em>completa</em> com os bônus</h3>
+      <p class="offer-sub">Escolha o seu plano:</p>
+
+      <div class="offer-tier" data-plan="essencial" role="radio" aria-checked="false" tabindex="0" onclick="selectPlan('essencial')">
+        <div class="offer-tier-head">
+          <span class="offer-radio"></span>
+          <span class="offer-tier-name">Essencial</span>
+          <span class="offer-tier-price">R$ 9,90</span>
+        </div>
+        <ul class="offer-list">
+          <li>Curso completo (Módulos 0 a 6)</li>
+          <li>Método CRIE</li>
+          <li>Acesso vitalício</li>
+        </ul>
+      </div>
+
+      <div class="offer-tier complete" data-plan="complete" role="radio" aria-checked="true" tabindex="0" onclick="selectPlan('complete')">
+        <span class="offer-tier-tag">Mais escolhido · só R$ 10 a mais</span>
+        <div class="offer-tier-head">
+          <span class="offer-radio"></span>
+          <span class="offer-tier-name">Completo + Bônus</span>
+          <span class="offer-tier-price">R$ 19,90</span>
+        </div>
+        <ul class="offer-list">
+          <li>Tudo do Essencial, e ainda os 7 bônus:</li>
+          <li class="bonus">Biblioteca de +100 prompts prontos</li>
+          <li class="bonus">Pack de 50 planilhas e dashboards</li>
+          <li class="bonus">Mini-curso de Excel &amp; Sheets do zero</li>
+          <li class="bonus">Templates de dashboard editáveis</li>
+          <li class="bonus">Guia "Sua 1ª renda extra"</li>
+          <li class="bonus">Comunidade + atualizações vitalícias</li>
+        </ul>
+      </div>
+
+      <button type="button" id="offerContinueBtn" class="offer-btn offer-btn-primary" onclick="continueCheckout()">
+        Continuar com o plano Completo
+      </button>
+      <p class="offer-note">🔒 Pagamento único · Pix ou cartão · Garantia de 7 dias</p>
+    </div>
+  </div>
+
+  <script>
+    // Configure os DOIS links de checkout (cada um com o preço certo):
+    var CHECKOUT_COMPLETO = '[LINK CHECKOUT COMPLETO R$ 19,90]';
+    var CHECKOUT_ESSENCIAL = '[LINK CHECKOUT ESSENCIAL R$ 9,90]';
+    var selectedPlan = 'complete';
+    function selectPlan(plan){
+      selectedPlan = plan;
+      document.querySelectorAll('.offer-tier').forEach(function(t){
+        var on = t.getAttribute('data-plan') === plan;
+        t.classList.toggle('selected', on);
+        t.setAttribute('aria-checked', on ? 'true' : 'false');
+      });
+      var btn = document.getElementById('offerContinueBtn');
+      if (btn) btn.textContent = (plan === 'complete' ? 'Continuar com o plano Completo' : 'Continuar com o plano Essencial');
+    }
+    function openOfferModal(){ selectPlan('complete'); document.getElementById('offerModal').classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeOfferModal(){ document.getElementById('offerModal').classList.remove('open'); document.body.style.overflow=''; }
+    function withUtms(url){ var qs = window.location.search; if(!qs || qs.length<2) return url; return url + (url.indexOf('?')===-1?'?':'&') + qs.substring(1); }
+    function continueCheckout(){
+      var url = (selectedPlan === 'complete') ? CHECKOUT_COMPLETO : CHECKOUT_ESSENCIAL;
+      if (window.fbq) fbq('track','InitiateCheckout',{value:(selectedPlan==='complete'?19.90:9.90),currency:'BRL'});
+      window.location.href = withUtms(url);
+    }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeOfferModal(); });
+  </script>
 
   <!-- ============ PURCHASE NOTIFICATION TOAST ============ -->
   <div id="toast" class="fixed bottom-4 left-4 z-50 hidden max-w-xs bg-white border-2 border-black rounded-xl shadow-hard-sm p-3">
