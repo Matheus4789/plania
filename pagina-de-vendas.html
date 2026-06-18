@@ -178,11 +178,11 @@
           <span class="w-9 h-9 rounded-full border-2 border-black bg-brand-green"></span>
           <span class="w-9 h-9 rounded-full border-2 border-black bg-white"></span>
           <span class="w-9 h-9 rounded-full border-2 border-black bg-brand-sage"></span>
-          <span class="w-9 h-9 rounded-full border-2 border-black bg-brand-deep grid place-items-center text-white text-[10px] font-bold">+9k</span>
+          <span class="w-9 h-9 rounded-full border-2 border-black bg-brand-deep grid place-items-center text-white text-sm font-bold">+</span>
         </div>
         <p class="text-sm font-bold flex items-center gap-1">
           <span class="text-star">★★★★★</span>
-          <span class="hidden sm:inline">— [PREENCHER] alunos transformaram sua relação com planilhas</span>
+          <span class="hidden sm:inline">— Crie qualquer planilha com IA, sem decorar fórmulas</span>
         </p>
       </div>
     </div>
@@ -684,7 +684,7 @@
     <div class="absolute inset-0 grid-pattern-dark pointer-events-none"></div>
     <div class="relative mx-auto max-w-5xl px-4 sm:px-6">
       <div class="text-center max-w-2xl mx-auto">
-        <h2 class="mt-5 font-heading font-extrabold tracking-tighter text-3xl sm:text-4xl text-white">🎁 7 bônus que valem R$ 670</h2>
+        <h2 class="mt-5 font-heading font-extrabold tracking-tighter text-3xl sm:text-4xl text-white">🎁 7 bônus que valem mais de R$ 640</h2>
       </div>
       <div class="mt-12 grid sm:grid-cols-2 gap-5">
         <div class="flex items-start gap-4 bg-brand-card border-2 border-white/15 rounded-2xl p-5">
@@ -805,7 +805,7 @@
         </div>
 
       </div>
-      <p class="mt-10 text-center text-sm font-bold text-black/60">📌 [PREENCHER: troque estes exemplos pelos prints reais dos comentários do seu Instagram/Facebook]</p>
+      <!-- TODO: trocar os comentários de exemplo acima por prints reais do Instagram/Facebook -->
     </div>
   </section>
 
@@ -922,7 +922,8 @@
         </span>
         <span class="font-heading font-extrabold text-2xl tracking-tighter">Plan<span class="text-brand-lime">IA</span></span>
       </div>
-      <p class="mt-4 text-sm font-medium text-white/50 max-w-xl mx-auto">[PREENCHER: nome da empresa/CNPJ] · Este produto não garante resultados financeiros — eles dependem do seu esforço e aplicação.</p>
+      <!-- TODO: inserir razão social e CNPJ reais no lugar de "PlanIA ·" abaixo -->
+      <p class="mt-4 text-sm font-medium text-white/50 max-w-xl mx-auto">PlanIA · Este produto não garante resultados financeiros — eles dependem do seu esforço e aplicação.</p>
       <div class="mt-4 flex justify-center gap-6 text-sm font-medium text-white/50">
         <a href="#" class="hover:text-brand-lime">Termos de uso</a>
         <a href="#" class="hover:text-brand-lime">Privacidade</a>
@@ -948,12 +949,9 @@
   <script>
     // ---- Countdown ----
     (function () {
-      const DURATION = 1000 * 60 * 60 * 24; // 24h
-      let end = parseInt(localStorage.getItem("planiaEnd") || "0", 10);
-      if (!end || end < Date.now()) {
-        end = Date.now() + DURATION;
-        localStorage.setItem("planiaEnd", String(end));
-      }
+      // Data/hora REAL de término da oferta — AJUSTE AQUI.
+      // new Date(ano, mês-1, dia, hora, min). Ex.: 30/06/2026 23:59 = new Date(2026, 5, 30, 23, 59)
+      const end = new Date(2026, 5, 30, 23, 59).getTime();
       const els = [document.getElementById("countdown"), document.getElementById("countdown2")];
       const pad = (n) => String(n).padStart(2, "0");
       function tick() {
