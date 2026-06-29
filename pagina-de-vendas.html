@@ -949,6 +949,7 @@
     // Links de checkout (cada plano com seu preço):
     var CHECKOUT_COMPLETO = 'https://pay.wiapy.com/7pT_6kY88VJ';
     var CHECKOUT_ESSENCIAL = 'https://pay.wiapy.com/q9obkFG5bE_';
+    var CHECKOUT_COMPLETO_990 = 'https://pay.wiapy.com/LwgsPephtO'; // Completo por R$ 9,90 (oferta de saída / back-redirect)
     function withUtms(url){ var qs = window.location.search; if(!qs || qs.length<2) return url; return url + (url.indexOf('?')===-1?'?':'&') + qs.substring(1); }
     function goCheckout(plan){
       var complete = (plan === 'complete');
@@ -990,6 +991,66 @@
         setTimeout(() => { toast.classList.add("hidden"); toast.classList.remove("toast-in"); }, 5000);
       }
       setTimeout(function loop() { show(); setTimeout(loop, 12000 + Math.random() * 8000); }, 6000);
+    })();
+  </script>
+
+  <!-- ===== BACK-REDIRECT / POPUP DE SAÍDA (downsell Completo por R$ 5,90) ===== -->
+  <div class="offer-modal" id="exitModal" onclick="if(event.target===this)closeExit()">
+    <div class="offer-card" role="dialog" aria-modal="true" aria-label="Oferta de última chance">
+      <button class="offer-close" type="button" aria-label="Fechar" onclick="closeExit()">×</button>
+      <span class="offer-tier-tag" style="background:#E0464A;color:#fff;border-color:#000;">⚠️ ESPERA! ANTES DE IR EMBORA</span>
+      <h3 class="offer-title">Leve o plano <em>Completo</em> por R$ 9,90</h3>
+      <p class="offer-sub">O curso + os 7 bônus, com o maior desconto que já fizemos. Só agora, nesta página.</p>
+      <div style="display:flex;align-items:center;gap:12px;margin:6px 0 14px;">
+        <span style="font-size:14px;font-weight:700;color:rgba(255,255,255,.5);text-decoration:line-through;">R$ 19,90</span>
+        <span style="font-family:'Poppins',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.03em;color:#6FE3A4;line-height:1;">R$ 9,90</span>
+        <span style="background:#6FE3A4;color:#000;font-size:12px;font-weight:800;padding:3px 10px;border:2px solid #000;border-radius:9999px;">-50%</span>
+      </div>
+      <ul class="offer-list">
+        <li>Curso completo (Módulos 0 a 6) + 18 videoaulas</li>
+        <li class="bonus">Biblioteca de +100 prompts prontos</li>
+        <li class="bonus">Pack de 50 planilhas e dashboards</li>
+        <li class="bonus">Mini-curso de Excel &amp; Sheets + templates editáveis</li>
+        <li class="bonus">Guia "Sua 1ª renda extra" + comunidade</li>
+      </ul>
+      <a href="#" id="exitBtn" class="offer-btn offer-btn-primary" onclick="goExitCheckout();return false;" style="margin-top:10px;">
+        QUERO O COMPLETO POR R$ 9,90 →
+      </a>
+      <button type="button" onclick="closeExit()" style="display:block;width:100%;margin-top:10px;background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;text-decoration:underline;cursor:pointer;">
+        Não, prefiro perder esse desconto
+      </button>
+      <p class="offer-note">🔒 Pagamento único · Acesso imediato · Garantia de 7 dias</p>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var KEY='plania_exit_shown';
+      var modal=document.getElementById('exitModal');
+      if(!modal) return;
+      function wasShown(){ try{ return sessionStorage.getItem(KEY)==='1'; }catch(e){ return false; } }
+      function markShown(){ try{ sessionStorage.setItem(KEY,'1'); }catch(e){} }
+      function openExit(){
+        if(wasShown() || modal.classList.contains('open')) return false;
+        markShown();
+        modal.classList.add('open'); document.body.style.overflow='hidden';
+        if(window.fbq) fbq('trackCustom','BackRedirectOffer');
+        return true;
+      }
+      window.closeExit=function(){ modal.classList.remove('open'); document.body.style.overflow=''; };
+      window.goExitCheckout=function(){
+        if(window.fbq) fbq('track','InitiateCheckout',{value:9.90,currency:'BRL'});
+        if(typeof CHECKOUT_COMPLETO_990!=='undefined' && CHECKOUT_COMPLETO_990){
+          window.location.href = (typeof withUtms==='function') ? withUtms(CHECKOUT_COMPLETO_990) : CHECKOUT_COMPLETO_990;
+        } else {
+          closeExit(); location.hash='#planos'; // fallback seguro até o link de R$ 5,90 ser configurado
+        }
+      };
+      // Back redirect (botão Voltar no mobile/desktop): empurra 1 entrada extra; no "voltar" mostra a oferta 1x
+      try{ history.pushState({plania:1}, '', location.href); }catch(e){}
+      window.addEventListener('popstate', function(){ if(!wasShown()) openExit(); });
+      // Exit intent no desktop: mouse saindo pelo topo da janela
+      document.addEventListener('mouseout', function(e){ if(e.clientY<=0 && !e.relatedTarget) openExit(); });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeExit(); });
     })();
   </script>
 </body>
